@@ -1,6 +1,6 @@
 /*
 Purpose: Create new Database and add the schemas to set database
-
+Warning: If Database/schemas already exist, nothing will happen and an error pops up
 */
 CREATE DATABASE DataWareHouse
 USE DataWareHouse
