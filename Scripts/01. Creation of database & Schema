@@ -1,0 +1,12 @@
+/*
+Purpose: Create new Database and add the schemas to set database
+
+*/
+CREATE DATABASE DataWareHouse
+USE DataWareHouse
+CREATE SCHEMA Bronze;
+GO
+CREATE SCHEMA Silver;
+GO
+CREATE SCHEMA Gold;
+GO
