@@ -1,6 +1,7 @@
 /*
 Purpose: Clean up the data for erp_loc_a101 and insert it into the silver layer. Special attention to make sure the customerid is matching, and there are no weird dublicates in country
 */
+TRUNCATE TABLE silver.erp_loc_a101;
 INSERT INTO silver.erp_loc_a101
 (cid, cntry)
 	SELECT
