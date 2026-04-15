@@ -1,6 +1,7 @@
 /*
 Purpose: Remove unwanted spaces from collums and handle the NULL. Afterwards insert it into the silver table.
 */
+TRUNCATE TABLE silver.crm_customer_info;
 INSERT INTO silver.crm_customer_info(
 cst_id,
 cst_key,
