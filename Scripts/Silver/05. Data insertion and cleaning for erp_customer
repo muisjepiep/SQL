@@ -1,0 +1,17 @@
+/*
+Purpose: Clean up the data for erp_customer_az12 and insert it into the silver layer. Special attention to make sure the customerid is matching, bdates are correct and gender is uniform.
+*/
+INSERT INTO silver.erp_customer_az12
+(cid, bdate, gen)
+	SELECT
+	CASE WHEN cid LIKE  'NAS%' THEN SUBSTRING(cid, 4, LEN(cid))
+		 ELSE cid
+	END cid,
+	CASE WHEN bdate > GETDATE() THEN NULL
+		 ELSE bdate
+	END bdate,
+	CASE WHEN UPPER(TRIM(gen)) IN ('F', 'FEMALE') THEN 'Female'
+		 WHEN UPPER(TRIM(gen)) IN ('M', 'MALE') THEN 'Male'
+		 ELSE 'Unknown'
+	END AS gen
+	FROM bronze.erp_customer_az12
