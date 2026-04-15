@@ -1,0 +1,13 @@
+/*
+Purpose: Clean up the data for erp_customer_az12 and insert it into the silver layer. Special attention to make sure the customerid is matching, bdates are correct and gender is uniform.
+*/
+INSERT INTO silver.erp_loc_a101
+(cid, cntry)
+	SELECT
+	REPLACE(cid, '-', '') cid,
+	CASE WHEN TRIM(cntry) = 'DE' THEN 'Germany'
+		 WHEN TRIM(cntry) IN ('USA', 'US') THEN 'United States'
+		 WHEN TRIM(cntry) = '' OR cntry IS NULL THEN 'Unknown'
+		 ELSE TRIM(cntry)
+	END AS cntry
+	FROM bronze.erp_loc_a101
