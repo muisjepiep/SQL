@@ -1,6 +1,7 @@
 /*
 Purpose: Remove unwanted spaces from collums and handle the NULL from crm_product_info. Also devide pdr_key into correct parts and map prd_line to the full name in the ERP. Afterwards insert it into the silver table.
 */
+TRUNCATE TABLE silver.crm_product_info;
 INSERT INTO silver.crm_product_info(
 prd_id,
 cat_id,
