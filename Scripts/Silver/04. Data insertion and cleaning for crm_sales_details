@@ -1,6 +1,7 @@
 /*
 Purpose: Clean and insert the bronze.crm_sales_details table into the silver layer. Making sure that there are no NULLS and formulas are fucntioning as expected.
 */
+TRUNCATE TABLE silver.crm_sales_details;
 INSERT INTO silver.crm_sales_details(
 sls_ord_num,
 sls_prd_key,
