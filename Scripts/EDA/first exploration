@@ -1,0 +1,34 @@
+--Sum all sales
+SELECT
+SUM(sales) AS total_sales FROM gold.fact_sales
+--How many items were sold
+SELECT SUM(quantity) AS nmb_sales FROM gold.fact_sales
+--What is the average price of the products that we sell
+SELECT AVG(price) AS avg_sales FROM gold.fact_sales
+--How many orders did we have
+SELECT COUNT(order_number) AS total_orders FROM gold.fact_sales
+SELECT COUNT(DISTINCT(order_number)) AS total_orders FROM gold.fact_sales
+--How many products do we have
+SELECT COUNT(product_key) AS total_product FROM gold.dim_product
+--How many customers do we have
+SELECT COUNT(customer_key) AS total_customers FROM gold.dim_customers
+--How many customers have placed an order
+SELECT COUNT(DISTINCT(customer_key)) AS paying_customers FROM gold.dim_customers
+
+
+
+--OR
+
+SELECT 'Total Sales' AS measure_name, SUM(sales) AS measure_value FROM gold.fact_sales
+UNION ALL
+SELECT 'total quantity' AS measure_name, SUM(quantity) AS measure_value FROM gold.fact_sales
+UNION ALL
+SELECT 'avg price'AS measure_name, ROUND(AVG(price), 0) AS measure_value FROM gold.fact_sales
+UNION ALL
+SELECT 'unique orders' AS measure_name, COUNT(DISTINCT(order_number)) AS measure_value FROM gold.fact_sales
+UNION ALL
+SELECT 'number of products' AS measure_name, COUNT(product_key) AS measure_value FROM gold.dim_product
+UNION ALL
+SELECT 'unique customers' AS measure_name, COUNT(customer_key) AS measure_value FROM gold.dim_customers
+UNION ALL
+SELECT 'how many customers have place an order' AS measure_name, COUNT(DISTINCT(customer_key)) AS measure_value FROM gold.dim_customers
