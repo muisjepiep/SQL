@@ -11,7 +11,7 @@ CREATE VIEW gold.dim_customers AS
 	la.cntry AS country,
 	ci.cst_marital_status AS marital_status,
 	CASE WHEN ci.cst_gndr != 'Unknown' THEN ci.cst_gndr
-		 ELSE COALESCE(ca.gen, 'Uknown')
+		 ELSE COALESCE(ca.gen, 'Unknown')
 	END AS gender,
 	ca.bdate AS birth_date,
 	ci.cst_create_date AS create_date
