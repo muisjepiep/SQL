@@ -4,7 +4,7 @@ Purpose: Clean up the data for erp_PX_CAT_G1V2 and insert it into the silver lay
 TRUNCATE TABLE silver.erp_PX_CAT_G1V2;
 INSERT INTO silver.erp_PX_CAT_G1V2
 (id, cat, subcat, maintenance)
-	SELECT
+	SELECT DISTINCT
 	id,
 	cat,
 	subcat,
