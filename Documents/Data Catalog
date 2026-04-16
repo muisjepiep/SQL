@@ -1,0 +1,38 @@
+gold.fact_sales
+
+order_number NVARCHAR(50) = unique ordering moments
+product_key INT = unique key to join dim_product
+customer_key INT = unique key to join dim_customers
+order_date DATE = when was the order placed
+ship_date DATE = when was the order shipped
+due_date DATE = when was the order due
+sales INT = how much money was made with the order in total
+quantity = how many products were ordered
+price = what is the price of the product
+
+
+gold.dim_customers
+
+customer_key INT = unique key to join fact_sales
+customer_id INT = unique id to see different customers
+first_name NVARCHAR(50) = name of customer
+last_name NVARCHAR(50) = last name of customer or family name
+country NVARCHAR(50) = where does the customer live/operate (example: Netherlands)
+maritial_status NVARCHAR(50) = is customer married or not (married, single, unknown)
+gender NVARCHAR(50) = what is the gender of the customer (male, female, unknown)
+birth_date DATE = birth date of customer
+create_date = when was customer created in the systems
+
+gold.dim_product
+
+product_key INT = unique key search up products
+product_id INT = unique key to join fact.sales
+product_number NVARCHAR(50) = unique code displayed to the world to identify products
+product_name NVARCHAR(50) = Name of product
+category_id NVARCHAR(50) = unique id to categorize products
+category_name NVARCHAR(50) = name of category
+subcategory NVARCHAR(50) = deeper specification of category
+maintenance NVARCHAR(50) = is product beign serviced
+cost INT = what does it cost to make set product?
+product_line NVARCHAR(50) = what is the commercial product line
+start_date DATE = when was the product first being produced
