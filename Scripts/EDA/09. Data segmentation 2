@@ -1,0 +1,27 @@
+--Task: devide customers into 3 segments based on how long they are customer and how much they spend
+WITH customer_spending AS(
+SELECT
+c.customer_key,
+SUM(f.sales) AS total_spending,
+MIN(order_date)	AS first_order,
+MAX(order_date) AS last_order,
+DATEDIFF(month, MIN(order_date), MAX(order_date)) AS loyalty
+FROM gold.fact_sales f
+LEFT JOIN gold.dim_customers c
+ON c.customer_key = f.customer_key
+GROUP BY c.customer_key
+)
+SELECT	
+class,
+COUNT(customer_key) AS total_customers
+FROM(
+SELECT 
+customer_key,
+CASE 
+	 WHEN loyalty > 12 AND total_spending < 5000 THEN 'regular'
+	 WHEN loyalty > 12 AND total_spending > 5000 THEN 'VIP'
+	 ELSE 'new'
+END class
+FROM customer_spending )t
+GROUP BY class
+ORDER BY total_customers desc
