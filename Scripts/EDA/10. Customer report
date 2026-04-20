@@ -1,0 +1,75 @@
+/*
+Purpose: Create a view where customer information can be retrived easily. This report should contain the full name, customer_key, customer_number, age, number of orders, 
+how many products bought in total, total sales, last order, lifespan, a specified classification based on how much the customer spends and how long they are customer for,
+classification based on age brackets, how many months since the last order, and how much does the customer spend on average on a monthly basis.
+*/
+CREATE VIEW gold.customer_report AS
+WITH base_query AS(
+SELECT --basic information retrival and minor transformations
+f.order_number,
+f.product_key,
+f.sales,
+f.quantity,
+f.order_date,
+c.customer_key,
+c.customer_number,
+CONCAT(c.first_name, ' ', c.last_name) AS customer_name,
+DATEDIFF(year, c.birth_date, GETDATE()) age
+FROM gold.fact_sales f
+LEFT JOIN gold.dim_customers c
+ON c.customer_key = f.customer_key
+WHERE order_date IS NOT NULL
+)
+
+, adv_cte AS(
+SELECT --more key metrics in order to make a full report later
+customer_key,
+customer_number,
+customer_name,
+age,
+COUNT(DISTINCT order_number) AS total_orders,
+SUM(sales) AS total_sales,
+SUM(quantity) AS total_quantity,
+COUNT(DISTINCT product_key) AS total_products,
+MAX(order_date) AS last_order,
+DATEDIFF(month, MIN(order_date), MAX(order_date)) AS lifespan
+FROM
+base_query
+GROUP BY customer_key,
+		 customer_number,
+		 customer_name,
+		 age
+)
+
+SELECT -- final report
+customer_key,
+customer_number,
+customer_name,
+age,
+total_orders,
+total_sales,
+total_quantity,
+total_products,
+last_order,
+lifespan,
+CASE 
+	 WHEN lifespan > 12 AND total_sales < 5000 THEN 'regular'
+	 WHEN lifespan > 12 AND total_sales > 5000 THEN 'VIP'
+	 ELSE 'new'
+END class,
+CASE 
+	WHEN age < 18 THEN 'Minor'
+	WHEN age BETWEEN 19 AND 30 THEN 'Young adult'
+	WHEN age BETWEEN 31 AND 45 THEN 'Adult'
+	WHEN age BETWEEN 46 AND 65 THEN 'Pre-retired'
+	ELSE 'Retired'
+END AS age_bracket,
+DATEDIFF(month, last_order, GETDATE()) AS recency,
+CASE 
+     WHEN total_sales = 0 THEN 0
+	 ELSE ROUND(total_sales / total_orders, 0)
+END AS avg_order_value,
+CASE WHEN lifespan = 0 THEN total_sales
+	 ELSE ROUND(total_sales / lifespan, 0)
+END AS avg_monthly_spend
+FROM adv_cte
