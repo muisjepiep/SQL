@@ -1,0 +1,32 @@
+/*
+Goal: Find what customer earns the company the most amount of profit
+*/
+WITH temp AS  (
+	SELECT
+	f.order_number,
+	f.customer_key,
+	f.product_key,
+	c.first_name,
+	c.last_name,
+	f.quantity,
+	f.sales,
+	p.cost,
+	f.quantity * p.cost AS totalcost
+	FROM gold.fact_sales f
+	LEFT JOIN gold.dim_product p
+	ON p.product_key = f.product_key
+	LEFT JOIN gold.dim_customers c
+	ON c.customer_key = f.customer_key
+	) 
+SELECT 
+	customer_key,
+	first_name,
+	sales - totalcost AS profit
+FROM temp
+GROUP BY
+	customer_key,
+	first_name,
+	sales,
+	totalcost
+ORDER BY
+profit DESC
